@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
@@ -19,12 +19,14 @@ def index(request):
 def loan_prediction(request):
 
     gender = request.POST.get('gender')
-    marital_status = request.POST.get('maritalstatus')
+    marital_status = request.POST.get('maritalStatus')
     dependents = request.POST.get('dependents')
     education = request.POST.get('education')
-    self_employed = request.POST.get('education')
-    applicantincome = request.POST.get('applicantincome')
-    coapplicantincome = request.POST.get('coapplicantincome')
+    self_employed = request.POST.get('selfEmployed')
+    applicantincome = request.POST.get('applicantIncome')
+    coapplicantincome = request.POST.get('coapplicantIncome')
+    print(gender, marital_status, dependents, education,
+          self_employed, applicantincome, coapplicantincome)
     if gender == 'Male':
         gendercode = 0
     elif gender == 'Female':
@@ -77,10 +79,10 @@ def loan_prediction(request):
 
     # Now, you can use this model for loan predictions
     # For example, you can input user data:
-    applicant = 50
-    coapplicant = 100
+    # applicant = 50
+    # coapplicant = 100
     # Input values based on column order and encoding
-    user_data = [applicant, coapplicant]
+    user_data = [applicantincome, coapplicantincome]
     predicted_loan_status = model.predict([user_data])[0]
     print(f'Predicted Loan Status: {predicted_loan_status}')
 
@@ -89,6 +91,7 @@ def loan_prediction(request):
                                       self_employed=self_employed, applicantincome=applicantincome, coapplicantincome=coapplicantincome, loan_status=predicted_loan_status, loan_amount=0)
 
         userdata.save()
+        return render(request, 'loan_prediction.html', {'loan_status': 'Not Eligible'})
     if predicted_loan_status == 'Y':
         # Load your dataset into a Pandas DataFrame
         df = pd.read_csv('./dataset/Loan_Data.csv')
@@ -132,11 +135,12 @@ def loan_prediction(request):
         # Now, you can use this trained model to predict loan amounts
         # For example, you can input user data similar to this:
         # Input values based on column order and encoding
-        user_data = [0, 1, 2, 1, 0, applicant, coapplicant]
+        user_data = [gendercode, marital_status_code, dependentcode, educationcode,
+                     self_employed_code, applicantincome, coapplicantincome]
         predicted_loan_amount = model.predict([user_data])
         predicted_loan_amount = float(predicted_loan_amount)
         print(round(predicted_loan_amount, 2)*1000)
         userdata = loanpredictiondata(gender=gender, marital_status=marital_status, dependents=dependents, education=education,
                                       self_employed=self_employed, applicantincome=applicantincome, coapplicantincome=coapplicantincome, loan_status=predicted_loan_status, loan_amount=round(predicted_loan_amount, 2)*1000)
         userdata.save()
-    return HttpResponse('r')
+        return render(request, 'loan_prediction.html', {'loan_status': 'Eligible', 'loan_amount': round(predicted_loan_amount, 2)*1000})
