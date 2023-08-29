@@ -59,7 +59,7 @@ def loan_prediction(request):
         self_employed_code = 0
 
     # Load your dataset into a Pandas DataFrame
-    df = pd.read_csv('./dataset/Loan_Data.csv')
+    df = pd.read_csv('/home/paarth1234/ML_internship_inhouse_project/dataset/Loan_Data.csv')
     # Separate features and target
     X = df[['ApplicantIncome', 'CoapplicantIncome']]
     y = df['Loan_Status']
@@ -94,7 +94,7 @@ def loan_prediction(request):
         return render(request, 'loan_prediction.html', {'loan_status': 'Not Eligible'})
     if predicted_loan_status == 'Y':
         # Load your dataset into a Pandas DataFrame
-        df = pd.read_csv('./dataset/Loan_Data.csv')
+        df = pd.read_csv('/home/paarth1234/ML_internship_inhouse_project/dataset/Loan_Data.csv')
 
         # Data preprocessing
         # Drop Loan_ID as it's not relevant for prediction
