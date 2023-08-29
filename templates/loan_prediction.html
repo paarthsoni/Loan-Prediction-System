@@ -1,109 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico" />
     <title>Loan Amount Prediciton</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #3aa3d0;
+      body {
+        font-family: Arial, sans-serif;
+        background-image: url("https://res.cloudinary.com/practicaldev/image/fetch/s--FYHU3D8E--/c_imagga_scale,f_auto,fl_progressive,h_900,q_auto,w_1600/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/pvxwwbri0wn8lhwk6a58.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
 
-        }
+      .container {
+        padding-top: 200px;
+        max-width: 500px;
+        height: 200px;
+        margin: 0 auto;
+        margin-left: 50px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        background-color: rgb(0 0 0 / 30%);
+        top: 50%;
+        color: white;
+      }
 
-        .container {
-            padding-top: 200px;
-            max-width: 500px;
-            height: 200px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            background-color: white;
-            top: 50%;
+      #againbutton {
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        border: 1px solid #007bff;
+        border-radius: 3px;
+        font-size: 1rem;
+        cursor: pointer;
+        text-decoration: none;
+      }
 
-        }
-
-        #againbutton {
-            padding: 10px 15px;
-            background-color: #007BFF;
-            color: white;
-            border: 1px solid #007BFF;
-            border-radius: 3px;
-            font-size: 1rem;
-            cursor: pointer;
-            text-decoration: none;
-
-        }
-
-        #againbutton:hover {
-            border: 1px solid #007BFF;
-            background: white;
-            color: #007BFF;
-        }
+      #againbutton:hover {
+        border: 1px solid #007bff;
+        background: white;
+        color: #007bff;
+      }
     </style>
 
+    <script
+      async=""
+      defer=""
+      src="https://buttons.github.io/buttons.js"
+    ></script>
 
-    <script async="" defer="" src="https://buttons.github.io/buttons.js"></script>
+    <div class="container" style="margin-top: 200px">
+      {% if loan_status == 'Eligible'%}
+      <h2>
+        Loan Eligibility:
+        <span style="color: green">{{loan_status}} &#128181;&#128181; </span>
+      </h2>
+      {% else %}
+      <h2>
+        Loan Eligibility:
+        <span style="color: red">{{loan_status}} &#128546;</span>
+      </h2>
+      {%endif%} {% if loan_status == 'Eligible' %}
+      <h2>Loan Amount: &#8377; {{loan_amount}}</h2>
+      {%endif%}
 
-    <div class="container" style="margin-top: 200px;">
-        {% if loan_status == 'Eligible'%}
-        <h2>Loan Eligibility: <span style="color: green;">{{loan_status}} &#128181;&#128181; </span></h2>
-        {% else %}
-        <h2>Loan Eligibility: <span style="color: red;">{{loan_status}} &#128546;</span></h2>
-        {%endif%}
-
-        {% if loan_status == 'Eligible' %}
-        <h2>Loan Amount: &#8377; {{loan_amount}} </h2>
-        {%endif%}
-
-        <a href="/" id="againbutton">Predict Again</a>
+      <a href="/" id="againbutton">Predict Again</a>
     </div>
+  </body>
 
-</body>
-
-<script>/**
+  <script>
+    /**
 https://github.com/matteobruni/tsparticles
 https://particles.js.org
 https://confetti.js.org
 */
     const duration = 60 * 60 * 1000,
-        animationEnd = Date.now() + duration,
-        defaults = { startVelocity: 30, spread: 360, ticks: 20, zIndex: 0 };
+      animationEnd = Date.now() + duration,
+      defaults = { startVelocity: 30, spread: 360, ticks: 20, zIndex: 0 };
 
     function randomInRange(min, max) {
-        return Math.random() * (max - min) + min;
+      return Math.random() * (max - min) + min;
     }
 
     const interval = setInterval(function () {
-        const timeLeft = animationEnd - Date.now();
+      const timeLeft = animationEnd - Date.now();
 
-        if (timeLeft <= 0) {
-            return clearInterval(interval);
-        }
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
 
-        const particleCount = 20 * (timeLeft / duration);
+      const particleCount = 20 * (timeLeft / duration);
 
-        // since particles fall down, start a bit higher than random
-        confetti(
-            Object.assign({}, defaults, {
-                particleCount,
-                origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
-            })
-        );
-        confetti(
-            Object.assign({}, defaults, {
-                particleCount,
-                origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
-            })
-        );
+      // since particles fall down, start a bit higher than random
+      confetti(
+        Object.assign({}, defaults, {
+          particleCount,
+          origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+        })
+      );
+      confetti(
+        Object.assign({}, defaults, {
+          particleCount,
+          origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+        })
+      );
     }, 250);
-</script>
-
+  </script>
 </html>
